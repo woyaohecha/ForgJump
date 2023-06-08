@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "frog_idle",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 3.6666666666666665,
+  "sample": 3,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "a08b6f57-f86e-47fa-8bc4-b08aa3db66b9"
+            }
+          },
+          {
+            "frame": 3,
+            "value": {
+              "__uuid__": "7d7c45f1-3706-4b6f-9a3d-f17772142176"
+            }
+          },
+          {
+            "frame": 3.3333333333333335,
+            "value": {
+              "__uuid__": "1bbba786-d26c-4e54-9971-b795547202df"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

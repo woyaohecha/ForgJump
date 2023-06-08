@@ -1,0 +1,59 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "ef_fail",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.4666666666666667,
+  "sample": 15,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "99ea74eb-50bc-44dc-8152-8f2510833f18"
+            }
+          },
+          {
+            "frame": 0.06666666666666667,
+            "value": {
+              "__uuid__": "353ec905-cd44-499f-945c-d20269db8c8b"
+            }
+          },
+          {
+            "frame": 0.13333333333333333,
+            "value": {
+              "__uuid__": "95c170e6-9974-49e2-a5b8-46d05c7f3961"
+            }
+          },
+          {
+            "frame": 0.2,
+            "value": {
+              "__uuid__": "8d4ac02e-d71f-4f0e-a785-b805cf711c75"
+            }
+          },
+          {
+            "frame": 0.26666666666666666,
+            "value": {
+              "__uuid__": "73517456-a8f2-430e-acec-f05d6ff68e17"
+            }
+          },
+          {
+            "frame": 0.3333333333333333,
+            "value": {
+              "__uuid__": "1439f922-f0fd-4179-bac2-c0a0ade8cfc7"
+            }
+          },
+          {
+            "frame": 0.4,
+            "value": null
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}
