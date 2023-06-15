@@ -122,7 +122,8 @@ export default class GameBg extends cc.Component {
                 //     this.stages.children[i].getChildByName("Tips").getComponent(cc.Label).string = "";
                 // }
                 if (this.stageCount % 5 == 0) {
-                    let temp = Math.floor(this.stageCount * 1000 + Math.random() * 1000);
+                    let temp = Math.floor(this.stageCount * 100 + Math.random() * 100);
+                    console.log("stageCount", this.stageCount, temp)
                     this.stages.children[i].getChildByName("Tips").getComponent(cc.Label).string = "超越" + temp + "名玩家";
                     this.stageCount++;
                 } else {
@@ -136,7 +137,6 @@ export default class GameBg extends cc.Component {
                 let tempY = 100 + Math.floor(this.stageCount / 3) * 20;
                 let posY = Tools.getRandomNum(-100, tempY > 260 ? 260 : tempY);
                 gold.setPosition(posX, posY);
-
                 break;
             }
         }
@@ -219,8 +219,9 @@ export default class GameBg extends cc.Component {
             // }
 
             if (this.stageCount % 5 == 0) {
-                let temp = Math.floor(this.stageCount * 1000 + Math.random() * 1000);
+                let temp = Math.floor(this.stageCount * 100 + Math.random() * 100);
                 stage.getChildByName("Tips").getComponent(cc.Label).string = "超越" + temp + "名玩家";
+                console.log("stageCount", this.stageCount, temp)
             } else {
                 stage.getChildByName("Tips").getComponent(cc.Label).string = "";
             }

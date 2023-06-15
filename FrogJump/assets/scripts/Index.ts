@@ -1,6 +1,5 @@
-import User from "./User";
-import WXCloud from "./WXCloud";
-import WXSdk from "./WXSDK";
+import { HttpManager } from "./HttpManager";
+import { WXManager } from "./WXManager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -14,45 +13,58 @@ export default class Index extends cc.Component {
     goldLabel: cc.Label = null;
 
     @property(cc.Node)
-    userNode: cc.Node = null;
+    rankBtn: cc.Node = null;
 
-    user: User = null;
+    @property(cc.Sprite)
+    avatar: cc.Sprite = null;
+
+    @property(cc.Label)
+    nickName: cc.Label = null;
+
+    @property(cc.Node)
+    rankLayer: cc.Node = null;
+
 
     onLoad() {
         cc.director.preloadScene("Game");
-        this.user = User.getInstance();
-        this.init();
-        this.node.on(cc.Node.EventType.TOUCH_START, () => {
-            console.log("touch");
-        })
+        if (WXManager.isLogin) {
+            this.init();
+        } else {
+            WXManager.wxLogin(this.rankBtn, this.onBtnOpenRank.bind(this), this.setAvatar.bind(this), this.setInfo.bind(this));
+        }
+    }
+
+    init() {
+        this.setAvatar();
+        this.setInfo();
     }
 
     start() {
-        WXSdk.Login((name, imageUrl) => {
-            let self = this;
-            cc.assetManager.loadRemote(imageUrl, { ext: '.png' }, function (e, texture: cc.Texture2D) {
-                // Use texture to create sprite frame
-                let spriteFrame = new cc.SpriteFrame(texture);
-                self.userNode.getChildByName("Profile").children[0].getComponent(cc.Sprite).spriteFrame = spriteFrame;
-            });
-            this.userNode.getChildByName("Name").getComponent(cc.Label).string = name;
-        });
-        this.openRank();
+        this.rankLayer.active = false;
     }
 
     BtnStart() {
         cc.director.loadScene("Game");
     }
 
-    init() {
-        this.scoreLabel.string = this.user.getData("historyScore");
-        this.goldLabel.string = this.user.getData("gold");
+
+    setAvatar() {
+        this.avatar.spriteFrame = HttpManager.avatar;
+        this.nickName.string = HttpManager.nickName;
     }
 
-    openRank() {
-        WXCloud.getRankTop10(() => {
-            console.log("排行数据获取回调");
-        });
+
+    setInfo() {
+        this.scoreLabel.string = HttpManager.score + "";
+        this.goldLabel.string = HttpManager.gold + "";
+    }
+
+    onBtnOpenRank() {
+        this.rankLayer.active = true;
+    }
+
+    onBtnCloseRank() {
+        this.rankLayer.active = false;
     }
 
 

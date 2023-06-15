@@ -1,7 +1,6 @@
 import FrogManager from "./FrogManager";
 import GameBg from "./GameBg";
 import UIManager from "./UIManager";
-import User from "./User";
 
 const { ccclass, property } = cc._decorator;
 

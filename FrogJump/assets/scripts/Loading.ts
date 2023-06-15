@@ -1,5 +1,5 @@
-import User from "./User";
-import WXCloud from "./WXCloud";
+import { HttpManager } from "./HttpManager";
+import { WXManager } from "./WXManager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -14,13 +14,9 @@ export default class Loading extends cc.Component {
 
     barValue: number = 0;
     toIndex: boolean = false;
-    user: User = null;
 
     onLoad() {
-        //初始化云服务器
-        WXCloud.init();
-        // cc.sys.localStorage.clear();
-        this.user = User.getInstance();
+        WXManager.showShareMenu();
     }
 
     start() {

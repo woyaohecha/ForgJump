@@ -1,6 +1,7 @@
 import GameBg from "./GameBg";
+import { HttpManager } from "./HttpManager";
 import PlayerCtrl from "./PlayerCtrl";
-import User from "./User";
+import { WXManager } from "./WXManager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -25,11 +26,9 @@ export default class UIManager extends cc.Component {
     settlePanel: cc.Node = null;
     propHelpPanel: cc.Node = null;
     propRelivePanel: cc.Node = null;
-    user: User = null;
 
     onLoad() {
         this.eventNode = cc.find("EventNode");
-        this.user = User.getInstance();
         this.gameBg = this.node.parent.getChildByName("GameBg").getComponent("GameBg");
         this.palyerCtrl = this.node.parent.getChildByName("PlayerCtrl").getComponent("PlayerCtrl");
         this.scoreLabel = this.node.getChildByName("GameUI").getChildByName("Score").getComponent(cc.Label);
@@ -63,7 +62,7 @@ export default class UIManager extends cc.Component {
 
     getPropHelp() {
         let btn = this.propHelpPanel.getChildByName("Btn");
-        if (this.user.getData("gold") >= 10) {
+        if (HttpManager.gold >= 10) {
             btn.getChildByName("Gold").active = true;
             btn.getChildByName("Video").active = false;
         } else {
@@ -74,8 +73,7 @@ export default class UIManager extends cc.Component {
     }
 
     propHelpGold() {
-        let value = this.user.getData("gold") - 10;
-        this.user.setData("gold", value);
+        HttpManager.gold -= 10;
         this.eventNode.emit("propHelp");
         this.propHelpPanel.active = false;
     }
@@ -96,7 +94,7 @@ export default class UIManager extends cc.Component {
         } else {
             this.reliveNumLabel.string = "每局可以使用3次（" + reliveNum + "/3）";
             let btn = this.propRelivePanel.getChildByName("Btn");
-            if (this.user.getData("todayShare") == 0) {
+            if (HttpManager.share == 0) {
                 btn.getChildByName("Share").active = true;
                 btn.getChildByName("Video").active = false;
             } else {
@@ -108,8 +106,10 @@ export default class UIManager extends cc.Component {
     }
 
     propReliveShare() {
+        WXManager.wxShare();
         console.log("分享成功");
-        this.user.setData("todayShare", 1);
+        HttpManager.share = 1;
+        HttpManager.saveScoreByUid();
         this.eventNode.emit("propRelive");
         this.propRelivePanel.active = false;
     }
@@ -133,12 +133,11 @@ export default class UIManager extends cc.Component {
         this.settleScoreLabel.string = String(score);
         this.settleGoldLabel.string = String(gold);
 
-        let userGold = this.user.getData("gold") + gold;
-        this.user.setData("gold", userGold);
-        if (score > this.user.getData("historyScore")) {
-            this.user.setData("historyScore", score);
+        HttpManager.gold += gold;
+        if (score > HttpManager.score) {
+            HttpManager.score = score;
+            HttpManager.saveScoreByUid();
         }
-
         this.settlePanel.active = true;
     }
 
