@@ -58,13 +58,13 @@ export default class FrogManager extends cc.Component {
                 // state.speed = 1000 / cc.Vec2.len(this.speed);
             }
             this.shadow.active = false;
-            this.node.x += this.speed.x * dt;
-            this.node.y += this.speed.y * dt;
-            this.speed.y -= dt * this.gravity;
+            this.node.x += this.speed.x * dt * 2;
+            this.node.y += this.speed.y * dt * 2;
+            this.speed.y -= dt * this.gravity * 2;
         }
     }
 
-    onCollisionEnter(other: cc.BoxCollider, self) {
+    onCollisionEnter(other: cc.BoxCollider, self: cc.BoxCollider) {
         switch (other.tag) {
             case 1:
                 this.effectAnim.play("ef_coin");
@@ -81,6 +81,9 @@ export default class FrogManager extends cc.Component {
                 this.frogAnim.play("frog_idle")
                 this.isJump = false;
                 this.shadow.active = true;
+                let stageCount = this.node.parent.getChildByName("PlayerCtrl").getComponent("PlayerCtrl").stageCount;
+                let temp = Math.floor((stageCount + 1) * 100 + Math.random() * 100);
+                other.node.parent.getChildByName("Tips").getComponent(cc.Label).string = "超越" + temp + "名玩家";
                 this.eventNode.emit("touchStage");
 
                 this.canMove = false;

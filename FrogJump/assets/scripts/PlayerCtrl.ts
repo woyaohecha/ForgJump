@@ -50,6 +50,9 @@ export default class PlayerCtrl extends cc.Component {
         this.node.on(cc.Node.EventType.TOUCH_MOVE, this.touchMove, this);
         this.node.on(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
         this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.touchEnd, this);
+        this.eventNode.on("canTouchMove", () => {
+            this.canTouchMove = true;
+        })
     }
 
     start() {
@@ -94,7 +97,7 @@ export default class PlayerCtrl extends cc.Component {
     }
 
     touchStage() {
-        this.canTouchMove = true;
+        // this.canTouchMove = true;
         this.stageCount++;
         this.score += 2;
         this.eventNode.emit("score", this.score);

@@ -114,21 +114,7 @@ export default class GameBg extends cc.Component {
                 let maxY = -175 + Math.floor(this.stageCount / 10) * 30;
                 this.stages.children[i].y = Tools.getRandomNum(minY, maxY > 150 ? 150 : maxY);
 
-                // if (this.stageCount % 3 == 0) {
-                //     let temp = Math.floor(Math.floor(this.stageCount / 2) + Math.random());
-                //     temp = temp > 98 ? 98 : temp;
-                //     this.stages.children[i].getChildByName("Tips").getComponent(cc.Label).string = "超越" + temp + "名玩家";
-                // } else {
-                //     this.stages.children[i].getChildByName("Tips").getComponent(cc.Label).string = "";
-                // }
-                if (this.stageCount % 5 == 0) {
-                    let temp = Math.floor(this.stageCount * 100 + Math.random() * 100);
-                    console.log("stageCount", this.stageCount, temp)
-                    this.stages.children[i].getChildByName("Tips").getComponent(cc.Label).string = "超越" + temp + "名玩家";
-                    this.stageCount++;
-                } else {
-                    this.stages.children[i].getChildByName("Tips").getComponent(cc.Label).string = "";
-                }
+                this.stages.children[i].getChildByName("Tips").getComponent(cc.Label).string = "";
 
                 //实例化金币
                 let gold = cc.instantiate(this.goldPrefab);
@@ -187,6 +173,7 @@ export default class GameBg extends cc.Component {
             .call(() => {
                 this.eventNode.emit("BgMoveCompleted");
                 this.canJudge = true;
+                this.eventNode.emit("canTouchMove");
             }, this)
             .start();
 
@@ -210,21 +197,14 @@ export default class GameBg extends cc.Component {
             stage.setParent(this.stages);
             stage.height = cc.winSize.height / 2;
             stage.setPosition(pos);
-            // if (count % 5 == 0) {
-            //     let temp = Math.floor(Math.floor(count / 2) + Math.random());
-            //     temp = temp > 98 ? 98 : temp;
-            //     stage.getChildByName("Tips").getComponent(cc.Label).string = "超越" + temp + "%玩家";
+            stage.getChildByName("Tips").getComponent(cc.Label).string = "";
+            // if (this.stageCount % 5 == 0) {
+            //     let temp = Math.floor(this.stageCount * 100 + Math.random() * 100);
+            //     stage.getChildByName("Tips").getComponent(cc.Label).string = "超越" + temp + "名玩家";
+            //     console.log("stageCount", this.stageCount, temp)
             // } else {
             //     stage.getChildByName("Tips").getComponent(cc.Label).string = "";
             // }
-
-            if (this.stageCount % 5 == 0) {
-                let temp = Math.floor(this.stageCount * 100 + Math.random() * 100);
-                stage.getChildByName("Tips").getComponent(cc.Label).string = "超越" + temp + "名玩家";
-                console.log("stageCount", this.stageCount, temp)
-            } else {
-                stage.getChildByName("Tips").getComponent(cc.Label).string = "";
-            }
 
             //两片叶子中间随机生成金币
             if (this.stageCount > 0) {

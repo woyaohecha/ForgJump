@@ -1,3 +1,11 @@
+/*
+ * @Author: LXR 923390756@qq.com
+ * @Date: 2023-06-09 01:01:36
+ * @LastEditors: LXR 923390756@qq.com
+ * @LastEditTime: 2023-07-13 04:10:35
+ * @FilePath: \FrogJump\assets\scripts\Loading.ts
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import { HttpManager } from "./HttpManager";
 import { WXManager } from "./WXManager";
 
@@ -27,13 +35,14 @@ export default class Loading extends cc.Component {
         if (this.toIndex) {
             return;
         }
-        this.valueLabel.string = this.barValue + "%";
-        this.loadingBar.progress = this.barValue / 100;
         if (this.barValue >= 99) {
+            this.barValue = 100;
             this.unscheduleAllCallbacks();
             this.toIndex = true;
             cc.director.loadScene("Index");
         }
+        this.valueLabel.string = this.barValue + "%";
+        this.loadingBar.progress = this.barValue / 100;
     }
 
     changeBarValue() {
