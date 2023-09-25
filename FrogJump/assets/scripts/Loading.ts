@@ -2,10 +2,11 @@
  * @Author: LXR 923390756@qq.com
  * @Date: 2023-06-09 01:01:36
  * @LastEditors: LXR 923390756@qq.com
- * @LastEditTime: 2023-07-13 04:10:35
+ * @LastEditTime: 2023-09-12 03:47:47
  * @FilePath: \FrogJump\assets\scripts\Loading.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
+import AudioManager from "./AudioManager";
 import { HttpManager } from "./HttpManager";
 import { WXManager } from "./WXManager";
 
@@ -25,6 +26,7 @@ export default class Loading extends cc.Component {
 
     onLoad() {
         WXManager.showShareMenu();
+        AudioManager.loadSoundBundle();
     }
 
     start() {
@@ -47,6 +49,11 @@ export default class Loading extends cc.Component {
 
     changeBarValue() {
         this.schedule(() => {
+            if (this.barValue >= 80) {
+                if (!AudioManager.soundsBundle) {
+                    return;
+                }
+            }
             this.barValue = Math.floor(this.barValue + Math.random() / 5 * 100 >= 100 ? 100 : this.barValue + Math.random() / 10 * 100);
         }, 0.02);
     }

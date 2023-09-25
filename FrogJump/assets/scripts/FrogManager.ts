@@ -1,3 +1,5 @@
+import AudioManager from "./AudioManager";
+
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -67,6 +69,7 @@ export default class FrogManager extends cc.Component {
     onCollisionEnter(other: cc.BoxCollider, self: cc.BoxCollider) {
         switch (other.tag) {
             case 1:
+                AudioManager.playSound("gold");
                 this.effectAnim.play("ef_coin");
                 this.eventNode.emit("touchGold");
                 other.node.destroy();
@@ -77,6 +80,7 @@ export default class FrogManager extends cc.Component {
                 if (distance <= 0) {
                     return;
                 }
+                AudioManager.playSound("fall");
                 this.eventNode.emit("bgMove", distance);
                 this.frogAnim.play("frog_idle")
                 this.isJump = false;

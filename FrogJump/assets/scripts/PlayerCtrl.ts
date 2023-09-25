@@ -1,3 +1,4 @@
+import AudioManager from "./AudioManager";
 import FrogManager from "./FrogManager";
 import GameBg from "./GameBg";
 import UIManager from "./UIManager";
@@ -62,6 +63,7 @@ export default class PlayerCtrl extends cc.Component {
 
 
     init() {
+        AudioManager.playBGM("game");
         this.eventNode.targetOff(this.eventNode);
         this.gameBg.init();
         this.UIManager.init();
@@ -103,19 +105,22 @@ export default class PlayerCtrl extends cc.Component {
         this.eventNode.emit("score", this.score);
     }
 
+    isStart: boolean = false;
     touchStart(e: cc.Event.EventTouch) {
         if (!this.canTouchMove) {
             return;
         }
+        this.isStart = true;
         this.arrow.active = true;
         this.arrow.angle = 0;
         this.drawStartPos = this.node.convertToNodeSpaceAR(e.getLocation());
     }
 
     touchMove(e) {
-        if (!this.canTouchMove) {
+        if (!this.canTouchMove || !this.isStart) {
             return;
         }
+        this.arrow.active = true;
         let endPos = this.node.convertToNodeSpaceAR(e.getLocation());
         let drawVec = cc.Vec2.subtract(new cc.Vec2, this.drawStartPos, endPos);
         let angle = Math.atan2(drawVec.y, drawVec.x) * 180 / Math.PI;
@@ -129,9 +134,10 @@ export default class PlayerCtrl extends cc.Component {
     }
 
     touchEnd(e) {
-        if (!this.canTouchMove) {
+        if (!this.canTouchMove || !this.isStart) {
             return;
         }
+        this.isStart = false;
         this.arrow.active = false;
         this.graph.clear();
         this.forceProgress.active = false;
@@ -149,6 +155,7 @@ export default class PlayerCtrl extends cc.Component {
         speed = cc.v2(Math.abs(speed.x) > 800 ? 800 : speed.x, Math.abs(speed.y) > 800 ? 800 : speed.y);
         // let speed = cc.Vec2.normalize(new cc.Vec2(), drawVec).multiplyScalar(400);
         this.eventNode.emit("canMove", speed);
+        AudioManager.playSound("jump");
     }
 
     drawLine(graph: cc.Graphics, startPos, speed) {

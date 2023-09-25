@@ -1,3 +1,4 @@
+import AudioManager from "./AudioManager";
 import Tools from "./Tools";
 
 const { ccclass, property } = cc._decorator;

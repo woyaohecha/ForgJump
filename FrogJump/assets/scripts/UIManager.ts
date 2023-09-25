@@ -1,3 +1,4 @@
+import AudioManager from "./AudioManager";
 import GameBg from "./GameBg";
 import { HttpManager } from "./HttpManager";
 import PlayerCtrl from "./PlayerCtrl";
@@ -14,6 +15,12 @@ export default class UIManager extends cc.Component {
     @property(cc.Label)
     settleGoldLabel: cc.Label = null;
 
+    @property(cc.Node)
+    tips: cc.Node = null;
+
+    @property(cc.Animation)
+    light: cc.Animation = null;
+
     @property(cc.Label)
     reliveNumLabel: cc.Label = null;
 
@@ -23,6 +30,7 @@ export default class UIManager extends cc.Component {
 
     scoreLabel: cc.Label = null;
     goldLabel: cc.Label = null;
+    historyLabel: cc.Label = null;
     settlePanel: cc.Node = null;
     propHelpPanel: cc.Node = null;
     propRelivePanel: cc.Node = null;
@@ -32,6 +40,7 @@ export default class UIManager extends cc.Component {
         this.gameBg = this.node.parent.getChildByName("GameBg").getComponent("GameBg");
         this.palyerCtrl = this.node.parent.getChildByName("PlayerCtrl").getComponent("PlayerCtrl");
         this.scoreLabel = this.node.getChildByName("GameUI").getChildByName("Score").getComponent(cc.Label);
+        this.historyLabel = this.node.getChildByName("GameUI").getChildByName("History").getComponent(cc.Label);
         this.goldLabel = this.node.getChildByName("GameUI").getChildByName("Gold").getComponent(cc.Label);
         this.settlePanel = this.node.getChildByName("Settle");
         this.propHelpPanel = this.node.getChildByName("PropHelp");
@@ -47,12 +56,16 @@ export default class UIManager extends cc.Component {
     init() {
         this.scoreLabel.string = "分数：" + 0;
         this.goldLabel.string = "金币：" + 0;
-
+        this.historyLabel.string = "历史最佳：" + HttpManager.score;
+        this.tips.active = false;
+        this.light.node.active = false;
         this.eventNode.on("score", (value) => {
             this.scoreLabel.string = "分数：" + value;
+            this.scoreLabel.node.getComponent(cc.Animation).play();
         });
         this.eventNode.on("gold", (value) => {
             this.goldLabel.string = "金币：" + value;
+            this.goldLabel.node.getComponent(cc.Animation).play();
         })
         this.eventNode.on("openPropRelive", this.openPropRelive, this);
         this.settlePanel.active = false;
@@ -128,6 +141,8 @@ export default class UIManager extends cc.Component {
 
 
     settle() {
+        AudioManager.stopMusic();
+        AudioManager.playSound("lose");
         let score = this.palyerCtrl.getSettleData().score;
         let gold = this.palyerCtrl.getSettleData().gold;
         this.settleScoreLabel.string = String(score);
@@ -135,8 +150,14 @@ export default class UIManager extends cc.Component {
 
         HttpManager.gold += gold;
         if (score > HttpManager.score) {
+            this.tips.active = true;
+            this.light.node.active = true;
+            this.light.play();
             HttpManager.score = score;
             HttpManager.saveScoreByUid();
+        } else {
+            this.tips.active = false;
+            this.light.node.active = false;
         }
         this.settlePanel.active = true;
     }
